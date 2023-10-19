@@ -1,0 +1,35 @@
+import admin from "firebase-admin";
+
+admin.initializeApp({
+  credential: admin.credential.cert({
+    type: "service_account",
+    project_id: "chainwork-e7f4c",
+    private_key_id: "67cb4a58896d5977076c1a7fa1a0bfa729887d40",
+    private_key:
+      "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC8l/HgqWsbwkKf\nTTFGhraxw59dKX27p9K/e57YENsTqsQAG/5KBoOlR0ux4UV4MGJg7GDdKfAPsmED\ngF+qrwGew0rsXnPePIKnzRTOUrR1H2Ri/igxz3hn0RekTCVm7ppkHjhfRTXfWbof\nzzqQfVbXuVYmOX7SEDwDdXd+xv/3lxZ4HY7h1xOc56hoIcxgnOAkbuE200xb6VAe\nYWno8OPhrWLrw8hMEnUq+JNIHmV8cONnx3BPVOb3tfhfcLTc1rj5bejGSepxPaIN\n/cgG8BYiYTikY+itd7DFJd3wEdrthmPBhimua19TW5LYdOOxZIAwtIK0q0BXkmQV\nl8OZ2vBxAgMBAAECggEAKwowKLnxWD3ur2VR/Artccc3vO6lo6hqt8lyGFRMcwIT\nRgUddO5kp9kMBNXo4UOFiCIZ/w89mo92hXKMIqta3s0p8aSio9LCbKIof+evCFW4\nNsFTEf8LtwGoeBXqqUGF2Zht/AwS/dx/1heYgXYhVg0VhJa1gyIyWAW8ViH7M5kS\nies62/rYMGrPEAZtbJtOVrVC5iCcTCBVpuGfc6A2Fq+HZsr44PbQDZsQLfSUmoS2\nm16DgvpnmpXFHrb8OREchRKYpLOxbq7u4CXddjQd9z4JAdL3dwWsVN/7JBlNvmLi\nf3hIPvbKWgQWOQTYI9cUGMkRF8btzJOAcNWB/fOx+QKBgQDp+JF+FQ782Swk7BEC\nW3MUOQ9aT6v/uZTIpeFOXwo4nU5anamP9o4i56S4lzTnO5kU7yR1QFNhwx9Pua44\nGm7s7m1WDxEZkP4H0oxA8FLafoRXvL4rc5vPLtPg8/sAZGexOf33l1/w2fLTcsCn\nLGeH/yv0/miZegCT/S454uwgTQKBgQDOWaNzRmXjyanOoMe81NtsBDudeQKLGsRN\nbPWWkzFCGQN8AXvDT5vFN62MIH0jLP3AUIxWfnowWf1jJ9MgHdOTsWV6hEcuyWRV\nQrsb2oAZHnDyiX23X1dcWDD4eSRV31mCz8igVPiHnORvPWTdibeSkVkBrXZTG1ZQ\n+bKrmwWCtQKBgCX4nUQlDsWiSTPEzA3h4Y9Ko184xuU9rRPTN/mMGxCNFwZFyBsB\nHJg1l9oNUBym43UuSnBs/BtFm3NI4ylfwNja6QuqblAD4/ZJCVIQrqGfHsNOcl6C\n6Kp7Iw/DCN1Lbjio/LqN6pggBvSiDvoSjsrXcr7T+w3NawKZeEMUvNWRAoGAQUVF\nWF86N3VAiyV8SJSj22TzXno6fbm3wi3m+PwSJrA20/C8LyltQlK8SIi2THwcv8o6\nudlD2St95PFh7NTCagNA8CILShdV70ouWT8iKc/hNjabV3eG8KTMyKu4/JirfZ8v\n/NcjzfGoqC8pSpIXSPtExi0SMnOBOBfjljhw48kCgYBmi+4LZ4QEXignviqtIUkJ\nXZElWhrTZmaIZ9IX7ZUY8bvEt59sVfTvLIdpK1P0HaS/qBL3nqx9TXM4lim6+rNi\nxdCkCawU5UF4rXeU2bXsmlK/m9cYkIQWICAX7NG2udk06zQBvZTSGJU85LyqjVt/\nF4tYWQsFyKIKjimQGRKkQw==\n-----END PRIVATE KEY-----\n",
+    client_email:
+      "firebase-adminsdk-3otdy@chainwork-e7f4c.iam.gserviceaccount.com",
+    client_id: "100931873238375849367",
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url:
+      "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-3otdy%40chainwork-e7f4c.iam.gserviceaccount.com",
+    universe_domain: "googleapis.com",
+  }),
+  // databaseURL: '<your-database-url>'
+});
+
+const sendNotification = async (registrationToken, payload) => {
+  try {
+    const response = await admin.messaging().send({
+      token: registrationToken,
+      notification: payload.notification,
+      data: payload.data,
+    });
+    console.log(`FCM notification sent: ${response}`);
+  } catch (error) {
+    console.error(`Error sending FCM notification: ${error}`);
+  }
+};
+export default sendNotification;
