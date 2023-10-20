@@ -100,7 +100,7 @@ export const sendEmail = async (req, res, next) => {
     });
 
     const mailData = {
-      from: '"Chainwork" <hammaddeveloper189@gmail.com>',
+      from: '"Audtik" <hammaddeveloper189@gmail.com>',
       to: email,
       subject: "One Time OTP",
       text: "Forget Password",
@@ -165,7 +165,7 @@ export const sendEmail = async (req, res, next) => {
           </div>
           <div class="footer">
               <p>This email was sent to you as part of our security measures.</p>
-              <p>&copy; 2023 Chianwork. All rights reserved.</p>
+              <p>&copy; 2023 Audtik. All rights reserved.</p>
           </div>
       </body>
       </html>
@@ -202,7 +202,7 @@ export const sendConfirmEmail = async (req, res, next) => {
     });
 
     const mailData = {
-      from: '"Chainwork" <hammaddeveloper189@gmail.com>',
+      from: '"Audtik" <hammaddeveloper189@gmail.com>',
       to: email,
       subject: "Welcome!",
       text: "We Noticed a New Login",
@@ -261,7 +261,7 @@ export const sendConfirmEmail = async (req, res, next) => {
           </div>
           <div class="footer">
               <p>This email was sent to you as part of our security measures.</p>
-              <p>&copy; 2023 Chianwork. All rights reserved.</p>
+              <p>&copy; 2023 Audtik. All rights reserved.</p>
           </div>
       </body>
       </html>
@@ -298,7 +298,7 @@ export const acceptEmail = async (req, res, next) => {
     });
 
     const mailData = {
-      from: '"Chainwork" <hammaddeveloper189@gmail.com>',
+      from: '"Audtik" <hammaddeveloper189@gmail.com>',
       to: email,
       subject: "Congratulations!",
       text: "Order Accepted",
@@ -357,7 +357,7 @@ export const acceptEmail = async (req, res, next) => {
           </div>
           <div class="footer">
               <p>This email was sent to you as part of our security measures.</p>
-              <p>&copy; 2023 Chianwork. All rights reserved.</p>
+              <p>&copy; 2023 Audtik. All rights reserved.</p>
           </div>
       </body>
       </html>
