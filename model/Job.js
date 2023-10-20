@@ -24,12 +24,13 @@ const jobSchema = new Schema({
   },
   projectPdf: [
     {
-      type: String,
+      publicId: String, // Public ID from Cloudinary
+      url: String, // URL to the PDF file
     },
   ],
-  projectPdf: {
-    type: String,
-  },
+  // projectPdf: {
+  //   type: String,
+  // },
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
