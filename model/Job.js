@@ -22,12 +22,7 @@ const jobSchema = new Schema({
     type: String,
     required: true,
   },
-  projectPdf: [
-    {
-      publicId: String, // Public ID from Cloudinary
-      url: String, // URL to the PDF file
-    },
-  ],
+  projectPdf: [],
   // projectPdf: {
   //   type: String,
   // },
