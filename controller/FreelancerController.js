@@ -82,6 +82,7 @@ export const submitProposal = catchAsyncError(async (req, res, next) => {
     totalPriceAfterFee,
     additionalInfo,
     projectTimePeriod,
+    proposalPdf,
   } = req.body;
 
   // Check if the bidder exists
@@ -119,6 +120,7 @@ export const submitProposal = catchAsyncError(async (req, res, next) => {
     deductionPrice,
     additionalInfo,
     projectTimePeriod,
+    proposalPdf,
     submittedAt: currentDate,
   });
 

@@ -17,6 +17,7 @@ const bidSchema = new Schema({
     type: Number,
     required: true,
   },
+  proposalPdf: [],
   totalPriceAfterFee: {
     type: Number,
     required: true,
