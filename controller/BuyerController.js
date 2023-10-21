@@ -587,6 +587,7 @@ export const UploadImage = async (req, res, next) => {
   for (const image of images) {
     try {
       const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
+      console.log(result);
       const publidId = result.public_id;
       const url = result.url;
       let data = {
@@ -606,42 +607,64 @@ export const UploadImage = async (req, res, next) => {
   res.json({ success: true, data: responce });
 };
 
-// export const uploadImages = async (req, res) => {
-//   const files = req.files;
-//   const uploader = async (path) => await cloudinary.uploader.upload(path);
-//   const urls = await Promise.all(
-//     files.map(async (file) => {
-//       const { path } = file;
-//       const newPath = await uploader(path);
-//       return newPath;
-//     })
-//   );
+// export const UploadDocument = async (req, res, next) => {
+//   let documents = [];
+//   if (req.files && req.files.documents) {
+//     if (!Array.isArray(req.files.documents)) {
+//       documents.push(req.files.documents);
+//     } else {
+//       documents = req.files.documents;
+//     }
+//   }
+//   let response = [];
+//   for (const document of documents) {
+//     try {
+//       const result = await cloudinary.v2.uploader.upload(
+//         document.tempFilePath,
+//         {
+//           resource_type: "raw", // Upload as raw file type
+//         }
+//       );
 
-//   res.json({
-//     success: true,
-//     data: {
-//       companyImage: urls[0],
-//       profileImage: urls[1],
-//       backgroundImage: urls[2],
-//     },
-//   });
+//       const publicId = result.public_id;
+//       const url = result.url;
+//       let data = {
+//         publicId,
+//         url,
+//       };
+//       response.push(data);
+//     } catch (error) {
+//       console.log(error);
+//       return res.status(500).json({ error: "Error uploading documents" });
+//     }
+//   }
+
+//   res.json({ success: true, data: response });
 // };
 
-// Add User Documents (PDF, Word, Excel)
+// User Profile
 export const UploadDocument = async (req, res, next) => {
-  let documents = [];
+  let pdfDocuments = [];
   if (req.files && req.files.documents) {
     if (!Array.isArray(req.files.documents)) {
-      documents.push(req.files.documents);
+      pdfDocuments.push(req.files.documents);
     } else {
-      documents = req.files.documents;
+      pdfDocuments = req.files.documents;
     }
   }
   let response = [];
-  for (const document of documents) {
+  for (const pdfDocument of pdfDocuments) {
+    // Check if the uploaded file is a PDF (you can modify this check as needed)
+    if (
+      pdfDocument.mimetype !== "application/pdf" ||
+      !pdfDocument.originalname.endsWith(".pdf")
+    ) {
+      return res.status(400).json({ error: "Uploaded file is not a PDF" });
+    }
+
     try {
       const result = await cloudinary.v2.uploader.upload(
-        document.tempFilePath,
+        pdfDocument.tempFilePath,
         {
           resource_type: "raw", // Upload as raw file type
         }
@@ -656,14 +679,13 @@ export const UploadDocument = async (req, res, next) => {
       response.push(data);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error: "Error uploading documents" });
+      return res.status(500).json({ error: "Error uploading PDF documents" });
     }
   }
 
   res.json({ success: true, data: response });
 };
 
-// User Profile
 export const UserProfile = catchAsyncError(async (req, res, next) => {
   try {
     const userId = req.params.id; // Get the user ID from the route parameter

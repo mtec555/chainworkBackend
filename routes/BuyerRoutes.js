@@ -83,7 +83,9 @@ router.route("/UploadImage", upload.array("avatars")).post(UploadImage);
 //   uploadImages
 // );
 
-router.route("/UploadDocument", upload.array("documents")).post(UploadDocument);
+router
+  .route("/UploadDocument", upload.single("documents"))
+  .post(UploadDocument);
 router
   .route("/getRunningProjectsForBuyer/:buyerId")
   .get(getRunningProjectsForBuyer);
