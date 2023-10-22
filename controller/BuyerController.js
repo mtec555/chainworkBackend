@@ -714,18 +714,24 @@ export const ProposalSendbyFreelancers = catchAsyncError(
     });
   }
 );
+
 // Get All Freelancer
 export const getAllFreelancers = catchAsyncError(async (req, res, next) => {
   try {
-    const { skills } = req.query; // Get the skills filter from the query parameter
+    const { skills, title } = req.query; // Get the skills filter from the query parameter
 
     let filters = { role: "freelancer" }; // Start with the basic filter for freelancers
-
     if (skills) {
       const regexSkills = skills
         .split(",")
         .map((skill) => new RegExp(skill, "i")); // Create a case-insensitive regex for each skill
       filters.skills = { $all: regexSkills }; // Use the $all operator to filter freelancers with all of the specified skills
+    }
+    if (title) {
+      const regexTitle = title
+        .split(",")
+        .map((title) => new RegExp(title, "i"));
+      filters.freelancerTitle = regexTitle; // Use the regex to filter freelancers by title
     }
 
     const freelancers = await User.find(filters);
