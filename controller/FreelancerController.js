@@ -329,7 +329,7 @@ export const getMyAllProjects = catchAsyncError(async (req, res, next) => {
 
 // Submit Project Work
 export const submitProjectWork = catchAsyncError(async (req, res, next) => {
-  const { projectId, freelancerId, submissionDetails } = req.body;
+  const { projectId, freelancerId, submissionDetails, projectPdf } = req.body;
 
   // Find the project by ID
   const project = await Project.findById(projectId);
@@ -353,6 +353,9 @@ export const submitProjectWork = catchAsyncError(async (req, res, next) => {
   project.submission.submittedAt = new Date();
   project.projectStatus = "Submitted"; // Change project status to "Submitted"
   project.projectDetails = submissionDetails;
+  project.submission.projectPdf = projectPdf;
+  // console.log("-->>", project.projectPdf);
+  // console.log("-->>", project);
 
   // Save the updated project to the database
   await project.save();
