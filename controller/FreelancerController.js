@@ -24,6 +24,8 @@ export const getAllJobs = catchAsyncError(async (req, res, next) => {
     const filterObject = {};
     if (filters.category)
       filterObject.category = { $regex: new RegExp(filters.category, "i") };
+    if (filters.title)
+      filterObject.title = { $regex: new RegExp(filters.title, "i") };
     if (filters.specialty)
       filterObject.specialty = { $regex: new RegExp(filters.specialty, "i") };
     if (filters.skills) {
