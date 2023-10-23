@@ -1152,28 +1152,57 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
   const userChats = await Chat.find({
     $or: [{ user: userId }, { other: userId }],
   });
+  let isSeen = []
   const populatedChats = await Promise.all(
     userChats.map(async (data) => {
+      let dynamicChatId = `${data._id}`; // getting chat id from user chats
+      
       if (data.user == userId) {
         const findPerson1 = await User.findById(data.other);
-
+        isSeen = await Message.aggregate([
+          {
+            $match: {
+              chatId: dynamicChatId,
+              is_seen: false
+            }
+          },
+          {
+            $group: {
+              _id: "$chatId",
+              unreadMessages: { $sum: 1 }
+            }
+          }
+        ]);
         const chatWithPersonData = {
           chatId: data._id,
           userId: data.user,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          // unread: data.unread,
+          unread: isSeen[0].unreadMessages,
         };
         return chatWithPersonData;
       } else {
         const findPerson1 = await User.findById(data.user);
-
+        isSeen = await Message.aggregate([
+          {
+            $match: {
+              chatId: dynamicChatId,
+              is_seen: false
+            }
+          },
+          {
+            $group: {
+              _id: "$chatId",
+              unreadMessages: { $sum: 1 }
+            }
+          }
+        ]);
         const chatWithPersonData = {
           chatId: data._id,
           userId: data.other,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          // unread: data.unread,
+          unread: isSeen[0].unreadMessages,
         };
         return chatWithPersonData;
       }
@@ -1182,7 +1211,7 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    chats: populatedChats,
+    chats: [populatedChats, userChats, isSeen],
   });
 });
 
@@ -1192,7 +1221,7 @@ export const getAllChatsForBuyer = catchAsyncError(async (req, res, next) => {
   const userChats = await Chat.find({
     $or: [{ user: userId }, { other: userId }],
   }).populate("user");
-
+  console.log(userChats);
   res.status(200).json({
     success: true,
     chats: userChats,
