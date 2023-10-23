@@ -598,7 +598,9 @@ export const UploadImage = async (req, res, next) => {
       responce.push(data);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error: "Error uploading file" });
+      return res
+        .status(500)
+        .json({ error: "Error uploading file", success: false });
     }
   }
   // console.log("-->1",responce);
