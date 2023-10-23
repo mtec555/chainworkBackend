@@ -1102,7 +1102,6 @@ export const SendMessage = catchAsyncError(async (req, res, next) => {
     sender,
     text,
     receiver,
-    is_seen: false,
   });
   try {
     const result = await message.save();
@@ -1154,7 +1153,8 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
   const { userId } = req.params;
   const userChats = await Chat.find({
     $or: [{ user: userId }, { other: userId }],
-  });
+  }).sort({ _id: -1 });
+   
   let isSeen = []
   const populatedChats = await Promise.all(
     userChats.map(async (data) => {
