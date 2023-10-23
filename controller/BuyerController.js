@@ -1180,7 +1180,7 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
           userId: data.user,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          unread: isSeen[0].unreadMessages,
+          unread: isSeen?isSeen[0].unreadMessages:"",
         };
         return chatWithPersonData;
       } else {
@@ -1204,7 +1204,7 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
           userId: data.other,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          unread: isSeen[0].unreadMessages,
+          unread: isSeen?isSeen[0].unreadMessages:"",
         };
         return chatWithPersonData;
       }
