@@ -1162,50 +1162,50 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
       
       if (data.user == userId) {
         const findPerson1 = await User.findById(data.other);
-        // isSeen = await Message.aggregate([
-        //   {
-        //     $match: {
-        //       chatId: dynamicChatId,
-        //       is_seen: false
-        //     }
-        //   },
-        //   {
-        //     $group: {
-        //       _id: "$chatId",
-        //       unreadMessages: { $sum: 1 }
-        //     }
-        //   }
-        // ]);
+        isSeen = await Message.aggregate([
+          {
+            $match: {
+              chatId: dynamicChatId,
+              is_seen: false
+            }
+          },
+          {
+            $group: {
+              _id: "$chatId",
+              unreadMessages: { $sum: 1 }
+            }
+          }
+        ]);
         const chatWithPersonData = {
           chatId: data._id,
           userId: data.user,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          // unread: isSeen?isSeen[0].unreadMessages:"",
+          unread: isSeen?isSeen[0].unreadMessages:"",
         };
         return chatWithPersonData;
       } else {
         const findPerson1 = await User.findById(data.user);
-        // isSeen = await Message.aggregate([
-        //   {
-        //     $match: {
-        //       chatId: dynamicChatId,
-        //       is_seen: false
-        //     }
-        //   },
-        //   {
-        //     $group: {
-        //       _id: "$chatId",
-        //       unreadMessages: { $sum: 1 }
-        //     }
-        //   }
-        // ]);
+        isSeen = await Message.aggregate([
+          {
+            $match: {
+              chatId: dynamicChatId,
+              is_seen: false
+            }
+          },
+          {
+            $group: {
+              _id: "$chatId",
+              unreadMessages: { $sum: 1 }
+            }
+          }
+        ]);
         const chatWithPersonData = {
           chatId: data._id,
           userId: data.other,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          // unread: isSeen?isSeen[0].unreadMessages:"",
+          unread: isSeen?isSeen[0].unreadMessages:"",
         };
         return chatWithPersonData;
       }
@@ -1214,7 +1214,7 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    chats: [populatedChats, userChats, isSeen],
+    chats: populatedChats,
   });
 });
 
