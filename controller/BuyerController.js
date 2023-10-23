@@ -1102,6 +1102,7 @@ export const SendMessage = catchAsyncError(async (req, res, next) => {
     sender,
     text,
     receiver,
+    is_seen: false,
   });
   try {
     const result = await message.save();
