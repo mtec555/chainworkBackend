@@ -1103,6 +1103,16 @@ export const SendMessage = catchAsyncError(async (req, res, next) => {
     text,
     receiver,
   });
+  let olgMesg = await Message.find({
+    _id: { $ne: message._id },
+    receiver: sender,
+    chatId: chatId,
+    is_seen: false
+  });
+  olgMesg.forEach( message=>{
+    message.is_seen = true;
+    message.save();
+  })
   try {
     const result = await message.save();
     res.status(200).json(result);
@@ -1116,6 +1126,12 @@ export const GetMessage = catchAsyncError(async (req, res, next) => {
   const { chatId } = req.body;
   try {
     const result = await Message.find({ chatId });
+    result.forEach(message => {
+      if(message.is_seen === false) {
+        message.is_seen = true;
+        message.save();
+      }
+    })
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json(error);
