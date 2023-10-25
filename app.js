@@ -53,6 +53,7 @@ io.on("connection", (socket) => {
       text: message.text,
       receiver: message.recieverId,
       document: message.document,
+      is_seen: false,
     });
 
     const result = await newMessage.save();

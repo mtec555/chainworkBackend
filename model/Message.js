@@ -23,6 +23,10 @@ const msgSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    is_seen: {
+      type: Boolean,
+      defaultValue: false
+    },
   },
   {
     timestamps: true,
