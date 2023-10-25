@@ -413,10 +413,52 @@ export const removeOffer = catchAsyncError(async (req, res, next) => {
 });
 
 // Add to Favorite
+// export const favorites = catchAsyncError(async (req, res, next) => {
+//   try {
+//     const { userId } = req.params;
+//     const { jobId } = req.body; // Assuming you send the job ID in the request body
+
+//     // Find the user
+//     const user = await User.findById(userId);
+
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "User not found" });
+//     }
+
+//     // Find the job
+//     const job = await Job.findById(jobId);
+
+//     if (!job) {
+//       return res.status(404).json({ success: false, message: "Job not found" });
+//     }
+
+//     // Check if the job is already in the user's favorites
+//     if (user.favorites.includes(jobId)) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "Job is already in favorites" });
+//     }
+
+//     // Add the job to the user's favorites
+//     user.favorites.push(jobId);
+
+//     // Save the updated user document
+//     await user.save();
+
+//     res.status(200).json({ success: true, message: "Job added to favorites" });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ success: false, message: "An error occurred", error });
+//   }
+// });
+
 export const favorites = catchAsyncError(async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { jobId } = req.body; // Assuming you send the job ID in the request body
+    const { jobId } = req.body;
 
     // Find the user
     const user = await User.findById(userId);
@@ -435,19 +477,29 @@ export const favorites = catchAsyncError(async (req, res, next) => {
     }
 
     // Check if the job is already in the user's favorites
-    if (user.favorites.includes(jobId)) {
+    const jobIndex = user.favorites.indexOf(jobId);
+
+    if (jobIndex !== -1) {
+      // The job is already in favorites, so remove it
+      user.favorites.splice(jobIndex, 1);
+
+      // Save the updated user document
+      await user.save();
+
       return res
-        .status(400)
-        .json({ success: false, message: "Job is already in favorites" });
+        .status(200)
+        .json({ success: true, message: "Job removed from favorites" });
+    } else {
+      // The job is not in favorites, so add it
+      user.favorites.push(jobId);
+
+      // Save the updated user document
+      await user.save();
+
+      return res
+        .status(200)
+        .json({ success: true, message: "Job added to favorites" });
     }
-
-    // Add the job to the user's favorites
-    user.favorites.push(jobId);
-
-    // Save the updated user document
-    await user.save();
-
-    res.status(200).json({ success: true, message: "Job added to favorites" });
   } catch (error) {
     res
       .status(500)
