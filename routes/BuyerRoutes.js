@@ -35,6 +35,7 @@ import {
   getAllReviewsForUser,
   addJobCategory,
   getAllCategory,
+  sendRevisionEmail,
 } from "../controller/BuyerController.js";
 import multer from "multer";
 const upload = multer({ dest: "uploads/" }); // Make sure to specify the destination directory
@@ -54,6 +55,7 @@ router.route("/requestRevision").post(requestRevision);
 router.route("/changePassword").post(changePassword);
 router.route("/cancelProject").post(cancelProject);
 router.route("/sendEmail").post(sendEmail);
+router.route("/sendRevisionEmail").post(sendRevisionEmail);
 router.route("/verify").post(verifyOTP);
 router.route("/createChat").post(CreateChat);
 router.route("/sendConfirmEmail").post(sendConfirmEmail);
@@ -73,15 +75,6 @@ router.route("/getSingleProject/:projectId").get(getSingleProject);
 router.route("/stripe_payment").post(stripe_payment);
 router.route("/sendOfferToFreelancer").post(sendOfferToFreelancer);
 router.route("/UploadImage", upload.array("avatars")).post(UploadImage);
-// router.post(
-//   "/upload",
-//   upload.array([
-//     { name: "companyImage", maxCount: 1 },
-//     { name: "profileImage", maxCount: 1 },
-//     { name: "backgroundImage", maxCount: 1 },
-//   ]),
-//   uploadImages
-// );
 
 router
   .route("/UploadDocument", upload.single("documents"))

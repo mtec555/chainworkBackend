@@ -184,6 +184,118 @@ export const sendEmail = async (req, res, next) => {
   }
 };
 
+// Revision Send Email
+export const sendRevisionEmail = async (req, res, next) => {
+  try {
+    const { email, name, projectTitle, buyerRevisionDes } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      return next(new ErrorHandler("User Not Found", 409));
+    }
+
+    const verificationCode = Math.floor(10000 + Math.random() * 90000)
+      .toString()
+      .substring(0, 5);
+    existingUser.otp = verificationCode;
+    await existingUser.save();
+
+    const transporter = nodemailer.createTransport({
+      port: 465,
+      host: "smtp.gmail.com",
+      secure: true,
+      auth: {
+        user: "hammaddeveloper189@gmail.com",
+        pass: "vvleopeoptowobxn",
+      },
+      secure: true,
+    });
+
+    const mailData = {
+      from: '"Audtik" <hammaddeveloper189@gmail.com>',
+      to: email,
+      subject: "Request for Project Revision",
+      text: "Project Revision",
+      html: ` <!DOCTYPE html>
+      <html>
+      <head>
+          <title>Request for Project Revision</title>
+          <style>
+              body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f4f4f4;
+              }
+
+              .container {
+                  max-width: 600px;
+                  margin: 0 auto;
+                  padding: 20px;
+                  background-color: #ffffff;
+                  border-radius: 10px;
+                  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+              }
+
+              h2 {
+                  color: #0056b3;
+              }
+
+              p {
+                  color: #777777;
+              }
+
+              .button {
+                  display: inline-block;
+                  padding: 10px 20px;
+                  background-color: #007bff;
+                  color: #ffffff;
+                  text-decoration: none;
+                  border-radius: 4px;
+              }
+
+              .otp {
+                  font-size: 24px;
+                  color: #333333;
+                  margin: 20px 0;
+              }
+
+              .footer {
+                  margin-top: 20px;
+                  text-align: center;
+                  color: #999999;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h2>Dear ${name}</h2>
+              <p>I hope this message finds you well. We wanted to inform you that the buyer has requested a revision for the project named ${projectTitle}.</p>
+              <p>Project Name: ${projectTitle}</p>
+              <h2>${buyerRevisionDes}</h2>
+              <p>We appreciate your dedication to delivering excellence. We are confident that your expertise will be a valuable asset in addressing the revision and ensuring the buyer's satisfaction.</p>
+              <p>We will keep you updated as the revision process unfolds, and we thank you for your cooperation in making this project a success.</p>
+              <p>Best regards,</p>
+              <p>The Chainwork Developer Team</p>
+          </div>
+          <div class="footer">
+              <p>This email was sent to you as part of our security measures.</p>
+              <p>&copy; 2023 Audtik. All rights reserved.</p>
+          </div>
+      </body>
+      </html>
+    `,
+    };
+
+    const info = await transporter.sendMail(mailData);
+
+    res.status(200).json({
+      success: true,
+      message: "Mail sent successfully",
+      messageId: info.messageId,
+    });
+  } catch (error) {
+    next(error); // Pass the error to the error handling middleware
+  }
+};
+
 // Send Confirm Email
 export const sendConfirmEmail = async (req, res, next) => {
   try {
@@ -1109,12 +1221,12 @@ export const SendMessage = catchAsyncError(async (req, res, next) => {
     _id: { $ne: message._id },
     receiver: sender,
     chatId: chatId,
-    is_seen: false
+    is_seen: false,
   });
-  olgMesg.forEach( message=>{
+  olgMesg.forEach((message) => {
     message.is_seen = true;
     message.save();
-  })
+  });
   try {
     const result = await message.save();
     res.status(200).json(result);
@@ -1128,12 +1240,12 @@ export const GetMessage = catchAsyncError(async (req, res, next) => {
   const { chatId } = req.body;
   try {
     const result = await Message.find({ chatId });
-    result.forEach(message => {
-      if(message.is_seen === false) {
+    result.forEach((message) => {
+      if (message.is_seen === false) {
         message.is_seen = true;
         message.save();
       }
-    })
+    });
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json(error);
@@ -1172,34 +1284,34 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
   const userChats = await Chat.find({
     $or: [{ user: userId }, { other: userId }],
   }).sort({ _id: -1 });
-   
-  let isSeen = []
+
+  let isSeen = [];
   const populatedChats = await Promise.all(
     userChats.map(async (data) => {
       let dynamicChatId = `${data._id}`; // getting chat id from user chats
-      
+
       if (data.user == userId) {
         const findPerson1 = await User.findById(data.other);
         isSeen = await Message.aggregate([
           {
             $match: {
               chatId: dynamicChatId,
-              is_seen: false
-            }
+              is_seen: false,
+            },
           },
           {
             $group: {
               _id: "$chatId",
-              unreadMessages: { $sum: 1 }
-            }
-          }
+              unreadMessages: { $sum: 1 },
+            },
+          },
         ]);
         const chatWithPersonData = {
           chatId: data._id,
           userId: data.user,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          unread: isSeen.length>0?isSeen[0].unreadMessages:0,
+          unread: isSeen.length > 0 ? isSeen[0].unreadMessages : 0,
         };
         return chatWithPersonData;
       } else {
@@ -1208,22 +1320,22 @@ export const getAllChatsForUser = catchAsyncError(async (req, res, next) => {
           {
             $match: {
               chatId: dynamicChatId,
-              is_seen: false
-            }
+              is_seen: false,
+            },
           },
           {
             $group: {
               _id: "$chatId",
-              unreadMessages: { $sum: 1 }
-            }
-          }
+              unreadMessages: { $sum: 1 },
+            },
+          },
         ]);
         const chatWithPersonData = {
           chatId: data._id,
           userId: data.other,
           other: findPerson1,
           lastMessage: data.lastMessage,
-          unread: isSeen.length>0?isSeen[0].unreadMessages:0,
+          unread: isSeen.length > 0 ? isSeen[0].unreadMessages : 0,
         };
         return chatWithPersonData;
       }
