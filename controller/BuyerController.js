@@ -1052,7 +1052,7 @@ export const acceptProject = catchAsyncError(async (req, res, next) => {
     // Find the buyer's user record based on their ID
     const buyer = await User.findById(project.postedBy);
     const job = await Job.findById(project.job);
-    console.log(project);
+    // console.log(project);
     const freelancer = await User.findById(project.freelancer);
     // console.log(freelancer);
     // console.log(buyer);
@@ -1072,6 +1072,7 @@ export const acceptProject = catchAsyncError(async (req, res, next) => {
       const amount = job.budget - twentyPercent;
       // freelancer.totalEarned = freelancer.totalEarned + job.budget;
       freelancer.totalEarned = freelancer.totalEarned + amount;
+      freelancer.totalJob = freelancer.totalJob + 1;
 
       // Save the updated freelancer record
       await freelancer.save();

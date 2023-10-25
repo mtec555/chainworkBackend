@@ -54,9 +54,9 @@ const userSchema = new Schema({
     },
   ],
   bio: String,
-  hourlyRate: {
-    type: String,
-    default: "0.00",
+  totalJob: {
+    type: Number,
+    default: 0,
   },
   responseTime: {
     type: String,
