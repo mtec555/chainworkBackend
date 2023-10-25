@@ -983,7 +983,7 @@ export const requestRevision = catchAsyncError(async (req, res, next) => {
   try {
     // Find the project by ID
     const project = await Project.findById(projectId);
-
+    console.log(revisionDetails);
     if (!project) {
       return next(new ErrorHandler("Project not found", 404));
     }
@@ -999,7 +999,7 @@ export const requestRevision = catchAsyncError(async (req, res, next) => {
     }
 
     // Add revision details to the project (you can have a dedicated field for this)
-    project.revisionDetails = revisionDetails;
+    project.projectDetails = revisionDetails;
 
     // Update the project's status back to "Progress" (or any appropriate status)
     project.projectStatus = "UnderReview";
@@ -1007,9 +1007,11 @@ export const requestRevision = catchAsyncError(async (req, res, next) => {
     // Save the updated project to the database
     await project.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Revision requested successfully" });
+    res.status(200).json({
+      success: true,
+      message: "Revision requested successfully",
+      project,
+    });
   } catch (error) {
     next(error);
   }
