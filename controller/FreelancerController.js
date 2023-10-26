@@ -486,9 +486,11 @@ export const favorites = catchAsyncError(async (req, res, next) => {
       // Save the updated user document
       await user.save();
 
-      return res
-        .status(200)
-        .json({ success: true, message: "Job removed from favorites" });
+      return res.status(200).json({
+        success: true,
+        message: "Job removed from favorites",
+        code: 1,
+      });
     } else {
       // The job is not in favorites, so add it
       user.favorites.push(jobId);
@@ -498,7 +500,7 @@ export const favorites = catchAsyncError(async (req, res, next) => {
 
       return res
         .status(200)
-        .json({ success: true, message: "Job added to favorites" });
+        .json({ success: true, message: "Job added to favorites", code: 2 });
     }
   } catch (error) {
     res
