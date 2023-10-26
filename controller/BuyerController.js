@@ -13,6 +13,7 @@ import Chat from "../model/Chat.js";
 import Message from "../model/Message.js";
 import nodemailer from "nodemailer";
 import JobCategory from "../model/Category.js";
+import sanitizeHtml from "sanitize-html";
 
 cloudinary.v2.config({
   cloud_name: "dirfoibin",
@@ -641,6 +642,12 @@ export const PostJob = catchAsyncError(async (req, res, next) => {
       return next(new ErrorHandler("Please Add Description", 409));
     }
 
+    // Sanitize HTML tags from the description
+    const sanitizedDescription = sanitizeHtml(description, {
+      allowedTags: [], // Allow no HTML tags
+      allowedAttributes: {}, // Allow no HTML attributes
+    });
+
     const newJob = await Job.create({
       title,
       category,
@@ -649,7 +656,7 @@ export const PostJob = catchAsyncError(async (req, res, next) => {
       estimateTime,
       budget,
       projectPdf,
-      description,
+      description: sanitizedDescription,
       projectPdf,
       // type,
       postedBy: id,
