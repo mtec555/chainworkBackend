@@ -101,7 +101,7 @@ export const sendEmail = async (req, res, next) => {
     });
 
     const mailData = {
-      from: '"Audtik" <hammaddeveloper189@gmail.com>',
+      from: '"Audtiklance" <hammaddeveloper189@gmail.com>',
       to: email,
       subject: "One Time OTP",
       text: "Forget Password",
@@ -162,11 +162,11 @@ export const sendEmail = async (req, res, next) => {
               <div class="otp">${verificationCode}</div>
               <p>Please use this OTP to reset your password. If you did not request this reset, please ignore this email.</p>
               <p>Best regards,</p>
-              <p>The Chainwork Developer Team</p>
+              <p>The Audtiklance Developer Team</p>
           </div>
           <div class="footer">
               <p>This email was sent to you as part of our security measures.</p>
-              <p>&copy; 2023 Audtik. All rights reserved.</p>
+              <p>&copy; 2023 Audtiklance. All rights reserved.</p>
           </div>
       </body>
       </html>
@@ -212,7 +212,7 @@ export const sendRevisionEmail = async (req, res, next) => {
     });
 
     const mailData = {
-      from: '"Audtik" <hammaddeveloper189@gmail.com>',
+      from: '"Audtiklance" <hammaddeveloper189@gmail.com>',
       to: email,
       subject: "Request for Project Revision",
       text: "Project Revision",
@@ -278,7 +278,7 @@ export const sendRevisionEmail = async (req, res, next) => {
           </div>
           <div class="footer">
               <p>This email was sent to you as part of our security measures.</p>
-              <p>&copy; 2023 Audtik. All rights reserved.</p>
+              <p>&copy; 2023 Audtiklance. All rights reserved.</p>
           </div>
       </body>
       </html>
@@ -315,7 +315,7 @@ export const sendConfirmEmail = async (req, res, next) => {
     });
 
     const mailData = {
-      from: '"Audtik" <hammaddeveloper189@gmail.com>',
+      from: '"Audtiklance" <hammaddeveloper189@gmail.com>',
       to: email,
       subject: "Welcome!",
       text: "We Noticed a New Login",
@@ -374,7 +374,7 @@ export const sendConfirmEmail = async (req, res, next) => {
           </div>
           <div class="footer">
               <p>This email was sent to you as part of our security measures.</p>
-              <p>&copy; 2023 Audtik. All rights reserved.</p>
+              <p>&copy; 2023 Audtiklance. All rights reserved.</p>
           </div>
       </body>
       </html>
@@ -411,7 +411,7 @@ export const acceptEmail = async (req, res, next) => {
     });
 
     const mailData = {
-      from: '"Audtik" <hammaddeveloper189@gmail.com>',
+      from: '"Audtiklance" <hammaddeveloper189@gmail.com>',
       to: email,
       subject: "Congratulations!",
       text: "Order Accepted",
@@ -470,7 +470,7 @@ export const acceptEmail = async (req, res, next) => {
           </div>
           <div class="footer">
               <p>This email was sent to you as part of our security measures.</p>
-              <p>&copy; 2023 Audtik. All rights reserved.</p>
+              <p>&copy; 2023 Audtiklance. All rights reserved.</p>
           </div>
       </body>
       </html>
