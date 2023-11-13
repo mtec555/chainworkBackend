@@ -83,7 +83,9 @@ io.on("connection", (socket) => {
     console.log("A user disconnected");
   });
 });
-
+app.get('/', async (req, res) => {
+    res.send('App Is Running')
+})
 app.listen(APP_PORT, () => {
   console.log(`app  on port ${APP_PORT}`);
 });
